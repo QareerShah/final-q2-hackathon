@@ -1,13 +1,20 @@
-import React, { useState } from "react";
+import React, { useState } from "react"; 
 import { useUser } from "@clerk/nextjs";
 import { SignInButton } from "@clerk/nextjs";
 import Link from "next/link";
 import StripeCheckOutButton from "./CheckoutButton";
 
+// Define a type for cart item
+interface CartItem {
+  name: string;
+  price: number;
+  quantity: number;
+}
+
 interface OrderSummaryProps {
   subtotal: number;
   deliveryCharge: number;
-  cartItems: any[];  // Receiving cartItems here
+  cartItems: CartItem[];  // Use CartItem[] instead of any[]
 }
 
 const OrderSummary: React.FC<OrderSummaryProps> = ({ subtotal, deliveryCharge, cartItems }) => {

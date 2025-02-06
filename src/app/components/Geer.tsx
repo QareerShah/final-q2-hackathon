@@ -117,7 +117,7 @@ export default function Carousal2() {
   );
 }
 
-export function ProductCarousel({ title, products, shopLink }: ProductCarouselProps) {
+export function ProductCarousel({ title, products }: ProductCarouselProps) {
   const [currentIndex, setCurrentIndex] = React.useState(0);
   const slideRef = React.useRef<HTMLDivElement>(null);
 

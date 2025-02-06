@@ -2,7 +2,14 @@
 
 import getStipePromise from "@/sanity/lib/stripe";
 
-const StripeCheckOutButton = ({ cartItems }: { cartItems: any[] }) => {
+// Define a type for a cart item
+interface CartItem {
+  name: string;
+  price: number;
+  quantity: number;
+}
+
+const StripeCheckOutButton = ({ cartItems }: { cartItems: CartItem[] }) => {
   const handleCheckout = async () => {
     const stripe = await getStipePromise();
 
@@ -34,8 +41,7 @@ const StripeCheckOutButton = ({ cartItems }: { cartItems: any[] }) => {
   return (
     <div className="py-5">
       <button
-       className="bg-black text-white px-6 py-3 rounded-lg w-40 text-center hover:bg-gray-700 transition"
-      
+        className="bg-black text-white px-6 py-3 rounded-lg w-40 text-center hover:bg-gray-700 transition"
         onClick={handleCheckout}
       >
         card payment
@@ -45,5 +51,3 @@ const StripeCheckOutButton = ({ cartItems }: { cartItems: any[] }) => {
 };
 
 export default StripeCheckOutButton;
-
-

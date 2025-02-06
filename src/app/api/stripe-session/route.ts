@@ -1,23 +1,33 @@
 import { NextRequest, NextResponse } from "next/server";
 import Stripe from "stripe";
 
+// Define a type for the body items to avoid using `any`
+interface Item {
+  name: string;
+  price: number;
+  quantity: number;
+}
+
 const key = process.env.STRIPE_SECRET_KEY || "";
-const stripe = new Stripe(key, { apiVersion:"2025-01-27.acacia"});
+const stripe = new Stripe(key, { apiVersion: "2025-01-27.acacia" });
 
 export async function POST(request: NextRequest) {
-  const body = await request.json();
+  const body: Item[] = await request.json();  // Specify the type for body
   console.log("Received body:", body);  // Log the request body to check
 
   try {
     if (body.length > 0) {
-      console.log("Creating Stripe session with line_items:", body.map((item: any) => ({
-        price_data: {
-          currency: "pkr",
-          product_data: { name: item.name },
-          unit_amount: item.price * 100,
-        },
-        quantity: item.quantity,
-      })));
+      console.log(
+        "Creating Stripe session with line_items:",
+        body.map((item) => ({
+          price_data: {
+            currency: "pkr",
+            product_data: { name: item.name },
+            unit_amount: item.price * 100,
+          },
+          quantity: item.quantity,
+        }))
+      );
 
       const session = await stripe.checkout.sessions.create({
         submit_type: "pay",
@@ -31,7 +41,7 @@ export async function POST(request: NextRequest) {
         invoice_creation: {
           enabled: true,
         },
-        line_items: body.map((item: any) => ({
+        line_items: body.map((item) => ({
           price_data: {
             currency: "pkr",
             product_data: { name: item.name },
@@ -58,8 +68,12 @@ export async function POST(request: NextRequest) {
       console.log("No products in body.");
       return NextResponse.json({ message: "No Data Found" });
     }
-  } catch (err: any) {
-    console.error("Error creating session:", err);
-    return NextResponse.json({ error: err.message, details: err });
+  } catch (err: unknown) {
+    if (err instanceof Error) {
+      console.error("Error creating session:", err.message);
+      return NextResponse.json({ error: err.message, details: err });
+    }
+    console.error("Unknown error occurred:", err);
+    return NextResponse.json({ error: "Unknown error occurred" });
   }
 }

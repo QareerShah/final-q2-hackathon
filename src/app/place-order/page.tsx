@@ -1,5 +1,6 @@
 'use client';
 
+import Link from 'next/link';
 import { FaCheckCircle } from 'react-icons/fa';
 
 const OrderConfirmationPage = () => {
@@ -13,9 +14,9 @@ const OrderConfirmationPage = () => {
         <p className="text-lg text-gray-600 mb-6">You will receive your parcel soon.</p>
 
         {/* Continue Shopping Button */}
-        <a href="/" className="inline-block bg-green-600 text-white px-6 py-3 rounded-lg hover:bg-green-700 transition-all">
+        <Link href="/" className="inline-block bg-green-600 text-white px-6 py-3 rounded-lg hover:bg-green-700 transition-all">
           Continue Shopping
-        </a>
+        </Link>
       </div>
     </main>
   );
